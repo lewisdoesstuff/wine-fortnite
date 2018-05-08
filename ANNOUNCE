@@ -1,0 +1,383 @@
+The Wine development release 3.7 is now available.
+
+What's new in this release (see below for details):
+  - MSI custom actions run in a separate process.
+  - Support for job files in the Task Scheduler.
+  - Improved viewport support in Direct 3D.
+  - Larger resolution version of the standard icons.
+  - Various bug fixes.
+
+The source is available from the following locations:
+
+  https://dl.winehq.org/wine/source/3.x/wine-3.7.tar.xz
+  http://mirrors.ibiblio.org/wine/source/3.x/wine-3.7.tar.xz
+
+Binary packages for various distributions will be available from:
+
+  https://www.winehq.org/download
+
+You will find documentation on https://www.winehq.org/documentation
+
+You can also get the current source directly from the git
+repository. Check https://www.winehq.org/git for details.
+
+Wine is available thanks to the work of many people. See the file
+AUTHORS in the distribution for the complete list.
+
+----------------------------------------------------------------
+
+Bugs fixed in 3.7 (total 26):
+
+  15350  wrong keyboard layout in Tomb Raider Anniversary / Legend
+  15984  Black and White: crashes with page fault on temple completion
+  18070  Multiple apps need separate msi custom action server process due to COM/MTA and/or isolation issues (Adobe CS3/CS4, Flash, Windows SDK 2008, Strawberry Perl, MS Office 2010)
+  22210  HTML-Kit Tools trial installer produces an error message in Win7 mode (IShellLink object needs to provide IPropertyStore interface)
+  22545  Multiple applications wrapped with Themida/WinLicense 2.0.x/2.1.x software protection need ntdll.dll.DbgUiRemoteBreakin stub (WinDVD 2010)
+  31630  BlueStacks 2 crashes during install with Wine Mono
+  37228  Cisco Jabber 11.x crashes on unimplemented function ntdsapi.dll.DsCrackNamesW
+  37594  World of Warcraft in-game browser does not work (needs advapi32.BuildSecurityDescriptorW() implementation)
+  37760  Several .Net applications fail under wine-mono with System.TimeZoneNotFoundException
+  41295  Multiple games require stream output support for vertex shaders
+  42106  Problem with user32.dll with Muv-Luv on steam: "Unimplemented function USER32.dll.GetAutoRotationState"
+  42686  Poedit crashes on start on unimplemented function msvcp140.dll.?_IsNonBlockingThread@_Task_impl_base@details@Concurrency@@SA_NXZ
+  43055  StarForce v3 kernel drivers crash on unimplemented function ntoskrnl.exe.FsRtlRegisterFileSystemFilterCallbacks (TrackMania Sunrise)
+  43951  Fallout 4 not loading textures
+  44343  Builtin WMP unable to play audio files from WPF's MediaPlayer class
+  44368  Fallout 4 has graphical issues
+  44871  Age of Empires II HD crashes often when restarting a scenario
+  44922  Cisco Jabber 11.x crashes on unimplemented function IPHLPAPI.DLL.GetIpForwardTable2,
+  44968  BASIC783Esetup.exe (Decimal BASIC) fails to install (needs SrClient.dll.SRSetRestorePoint)
+  44971  HackShield for Banking Driver 'HSBDrvNt.sys' (part of Ahnlab Safe Transaction) crashes on unimplemented function ntoskrnl.exe.ExInterlockedPopEntrySList
+  44984  Maya 2018 LT Installer requires unimplemented function api-ms-win-crt-time-l1-1-0.dll._timespec64_get
+  44993  Magic The Gathering Arena fails to install
+  44995  Metatrader4 installation needs sspicli.dll.AcquireCredentialsHandleW
+  45026  Windows File Manager (WinFile) fails to build in winelib (LPDROPSTRUCT missing from winuser.h)
+  45040  Morrowind Crashes shortly after boot when the user installs the Morrowind Code Patch.
+  45044  Microsoft Visual C++ 2005, 2008 Redistributable installers fail with 'action L"SxsInstallCA" returned 1603'
+
+----------------------------------------------------------------
+
+Changes since 3.6:
+
+Alexandre Julliard (13):
+      winedump: Print the thunk address for imports instead of the name address.
+      user32: Reimplement AdjustWindowRectEx using NONCLIENTMETRICSW.
+      user32: Implement AdjustWindowRectExForDpi().
+      user32: Add partial stub for GetDpiForMonitorInternal().
+      user32: Implement GetDpiForWindow().
+      user32: Implement LogicalToPhysicalPointForPerMonitorDPI() and PhysicalToLogicalPointForPerMonitorDPI().
+      user32: Add 256x256 variants of the standard icons.
+      shell32: Add 256x256 variants of the standard icons.
+      joy.cpl: Add a 256x256 icon.
+      winex11: Support multiple fallbacks for cursor names.
+      winex11: Avoid left_side/top_side cursor names.
+      user32: Destroy thread windows by going through the handle table.
+      user32: Don't wait for other threads to process WM_NCDESTROY.
+
+Alistair Leslie-Hughes (6):
+      comctl32/treeview: Fix item icon background when using TVS_FULLROWSELECT style.
+      ntoskrnl: Implement ExInterlockedPushEntrySList.
+      ntoskrnl: Add FsRtlRegisterFileSystemFilterCallbacks stub.
+      kernel32: Implement GetCurrencyFormatEx.
+      shell32: Implement SHCreateSessionKey.
+      hnetcfg/tests: Add INetFwAuthorizedApplication tests.
+
+Andrew Wesie (1):
+      advapi32: Implement BuildSecurityDescriptorW.
+
+Anton Romanov (3):
+      wmp: Add seeking and duration.
+      wmp: Stub IWMPNetwork get download/buffering progress.
+      wmp: IWMPSettings implement put/get volume.
+
+Austin English (5):
+      iphlpapi: Add GetIpForwardTable2 stub.
+      ntdsapi: Add DsCrackNamesA/W stubs.
+      include/winuser.h: Add tagDROPSTRUCT struct.
+      include/wfext.h: Add miscellaneous FM_* defines.
+      ntdll: Add DbgUiRemoteBreakin() stub.
+
+Bernhard Übelacker (1):
+      cmd: Avoid having first parameter to start.exe ignored.
+
+Dmitry Timoshkov (44):
+      dinput: The DIK_ key code should match the scan code.
+      dinput/tests: Add some tests for DIK_ codes using different keyboard layouts.
+      schedsvc: Add a thread for monitoring version 1 task files.
+      schedsvc: Add support for reading .job files.
+      schedsvc: Remove job from the list when job file is deleted.
+      schedsvc: Implement NetrJobGetInfo.
+      schedsvc: Implement NetrJobEnum.
+      schedsvc: Implement NetrJobDel.
+      schedsvc: Implement NetrJobAdd.
+      mstask: Implement IPersistFile::GetClassID().
+      mstask: Implement ITask::GetStatus().
+      mstask: ITask::GetErrorRetryCount() is not implemented.
+      mstask: ITask::GetErrorRetryInterval() is not implemented.
+      mstask: Implement ITask::GetIdleWait().
+      mstask: Implement ITask::GetPriority().
+      mstask: Implement better stub for ITask::GetExitCode().
+      mstask: Implement better stub for ITask::GetMostRecentRunTime().
+      mstask: Implement IPersistFile::Save().
+      schedsvc: Allow others to read the file.
+      schedsvc: Print an error if the service couldn't start monitoring the tasks directory.
+      mstask: Save a task with at least 1 trigger to follow the .job file spec.
+      mstask: Initialize task file name in the task constructor.
+      mstask: Fix saving the triggers.
+      mstask: Implement ITask::GetTriggerCount().
+      mstask: Implement ITask::CreateTrigger().
+      mstask: Implement ITask::DeleteTrigger().
+      mstask: Implement ITask::GetTrigger().
+      mstask/tests: Add some tests for trigger management.
+      schedsvc: Fix NetrJobGetInfo return value in case of invalid job id.
+      schedsvc: Fix NetrJobDel return value in case of invalid job id.
+      mstask/tests: Also test the ITask::GetStatus() return value.
+      mstask: Implement IPersistFile::GetCurFile().
+      mstask: Implement IPersistFile::Load().
+      mstask: Return S_OK from ITask::SetFlags().
+      mstask: Implement ITaskScheduler::Activate().
+      mstask: Implement ITaskScheduler::AddWorkItem().
+      mstask/tests: Add more tests for ITaskScheduler::AddWorkItem().
+      sspicli: Add forwards to secur32.
+      mstask: Switch to using heap wrappers.
+      mstask: Forward IPersistFile::AddRef()/Release() to parent object.
+      mstask: Add dirty flag management.
+      mstask: Improve ITask::GetNextRunTime() stub.
+      mstask: Correctly initialize trigger count when loading a task.
+      mstask: Write correct trigger count to a job file.
+
+François Gouget (14):
+      winebus.sys: Fix a typo in a comment.
+      winevulkan: Tweak the wording of a comment.
+      user32: Fix the name of an unused debugging function.
+      kernel32/tests: Add a trailing '\n' to an ok() call.
+      windowscodecs: Make get_metadata_container() static.
+      d3d8/tests: Fix a typo in a comment.
+      dmime: Make IDirectMusicUtils_IPersistStream_ParseDescGeneric() static.
+      dmime: Add a trailing '\n' to a FIXME().
+      comctl32: Remove THEMING_SetSubclassData(). It is not used anymore.
+      mshtml: Make set_frame_doc() static.
+      makefiles: Make it possible to only build the tests.
+      wsdapi: Make send_udp_multicast_of_type() static.
+      amstream: Remove an unused NONAMELESSSTRUCT directive.
+      bthprops.cpl: Remove an unused NONAMELESSUNION directive.
+
+Gijs Vermeulen (1):
+      tdh: Add version resource.
+
+Hans Leidekker (6):
+      msi: Don't cache the base URL.
+      webservices: Properly restore the reader position when the next element doesn't match.
+      include: Fix a couple of LSA typedefs.
+      kerberos: Consistently use NTSTATUS return values.
+      secur32: Implement LsaDeregisterLogonProcess.
+      secur32: Return a handle from LsaRegisterLogonProcess.
+
+Henri Verbeet (5):
+      wined3d: Get rid of the "numberedArraysLoaded" field in struct wined3d_context.
+      wined3d: Move the stream source binding code to context.c.
+      wined3d: Handle "namedArraysLoaded" in context_unload_vertex_data().
+      wined3d: Use wined3d_bit_scan() in context_unload_numbered_arrays().
+      wined3d: Simplify context_update_stream_sources().
+
+Hugh McMaster (5):
+      regedit: Use the correct window class name.
+      regedit/tests: Add tests for values with embedded null characters.
+      reg/tests: Add tests for values with embedded null characters.
+      regedit: Null terminate hex-formatted REG_SZ data if necessary.
+      reg: Null terminate hex-formatted REG_SZ data if necessary.
+
+Jacek Caban (3):
+      jscript: Remove unused prop_get arguments.
+      jscript: Remove unused prop_put arguments.
+      d3d11.idl: Fixed a typo in CD3D11_BLEND_DESC constructor.
+
+Jactry Zeng (7):
+      riched20: Check para before use in ME_PrevRun.
+      riched20: Save reobj in linked list.
+      riched20: Implement IRichEditOle::GetObjectCount.
+      riched20: Implement IRichEditOle::GetObject.
+      riched20/tests: Add tests for IRichEditOle::{GetObject,GetObjectCount}.
+      riched20: Implement EM_SELECTIONTYPE.
+      riched20: Use ME_GetSelectionType() in ME_ShowContextMenu() for getting type of selection.
+
+Josh DuBois (1):
+      wineandroid: Silence a noisy FIXME in ANDROID_GetKeyboardLayout.
+
+Józef Kucia (28):
+      d3d10core/tests: Add additional tests for shader input/output matching.
+      d3d10core/tests: Add test for state refcounting.
+      d3d11/tests: Add test for ResolveSubresource().
+      d3d9: Validate adapter format in CheckDeviceFormat().
+      wined3d: Introduce helper function to get shader type from byte code.
+      wined3d: Simplify geometry_shader_init().
+      wined3d: Add support for stream output with vertex shaders.
+      wined3d: Avoid using gl_ViewportIndex unnecessarily.
+      d3d11/tests: Add test for stream output without geometry shaders.
+      wined3d: Scan output signatures for pass-through geometry shaders.
+      wined3d: Reduce number of parameters passed to shader_get_registers_used().
+      d3d10core/tests: Add test for stream output without geometry shaders.
+      wined3d: Remove redundant size checks before memcpy().
+      d3d11/tests: Introduce helper function to set viewport.
+      d3d11/tests: Introduce draw_color_quad_vs() helper function.
+      d3d10core/tests: Add test for ResolveSubresource().
+      wined3d: Parse SM5 precise instruction modifier.
+      d3d10core/tests: Introduce helper function to set viewport.
+      d3d10core/tests: Add test for draws with NULL render target views.
+      dxgi: Remove useless FIXME() messages about adapter type.
+      wined3d: Disable transform feedback when there are no varyings to record.
+      d3d11: Use WARN() instead of FIXME() in d3d11_device_GetDeviceRemovedReason().
+      d3d11: Do not print FIXMEs() for known DXBC chunks in shdr_handler().
+      wined3d: Implement clears for 1D render target views.
+      wined3d: Implement copying for 1D textures.
+      d3d11/tests: Add test for clearing 1D render target views.
+      wined3d: Do not check for ARB_fragment_program in arbfp_blit_supported().
+      wined3d: Correctly check for absence of precise flags.
+
+Louis Lenders (3):
+      shell32: Update specs for SHGetSetFolderCustomSettings to behaviour above win2003.
+      winmm: Return error in waveOutMessage if either dwParam1 or dwParam2 is null.
+      shell32/tests: Add a test for SHGetSetFolderCustomSettings.
+
+Martin Storsjo (1):
+      makedep: Remove an incorrect -b when creating cross import libraries.
+
+Matteo Bruni (18):
+      wined3d: Remove unused return values from the YUV shader generation helpers in the ARBfp blitter.
+      wined3d: Implement source fixups in the GLSL blitter.
+      wined3d: Use staging resources to blit from CPU resources in the GLSL blitter.
+      wined3d: Use staging resources to blit from CPU resources in the ARBfp blitter.
+      d3dx9: Allow passes argument to Begin() to be NULL.
+      wined3d: Fix stateblock viewports memcmp() size.
+      wined3d: Enable GL_ARB_viewport_array extension in GLSL shaders.
+      ddraw/tests: Port test_viewport() to ddraw4.
+      wined3d: Allow context_draw_shaded_quad() to function without immediate mode draws.
+      d3drm: Add viewport to the device before setting viewport parameters.
+      ddraw: Forbid setting viewport extents larger than the render target in SetViewport().
+      ddraw/tests: Port test_viewport() to ddraw2.
+      ddraw/tests: Port test_viewport() to ddraw1.
+      d3d9/tests: Make use of the readback helpers in check_rect().
+      d3d9/tests: Improve test_viewport().
+      wined3d: Don't clamp viewport coordinates.
+      d3d9/tests: Add more tests to test_viewport().
+      wined3d: Don't attach render targets on clears when unnecessary.
+
+Michael Müller (4):
+      ntoskrnl: Implement ExInterlockedPopEntrySList.
+      include: Add more constants to SYSTEM_INFORMATION_CLASS.
+      include/roapi.h: Add further typedefs.
+      hnetcfg: Improve INetFwAuthorizedApplication::get_ProcessImageFileName stub.
+
+Nikolay Sivov (18):
+      wined3d: Add support for setting multiple viewports.
+      user32/menu: Hold a reference to menu data for calls with menu handles on input.
+      user32/menu: Replace macro checks for window style with a helper function.
+      d3d11: Allow setting multiple viewports.
+      d3d10: Allow setting multiple viewports.
+      wined3d: Add support for returning multiple viewports.
+      d3d11: Add support for returning multiple viewports.
+      d3d10: Add support for returning multiple viewports.
+      d3d9/tests: Add a basic test for default value and limits of max frame latency parameter.
+      uxtheme/tests: Remove some trace messages.
+      wined3d: Add support for setting multiple scissor rectangles.
+      include: Add more DXGI swapchain flags.
+      d3d11: Add support for setting multiple scissor rectangles.
+      wined3d: Add support for returning multiple scissor rectangles.
+      d3d11: Add support for returning multiple scissor rectangles.
+      d3d10core/tests: Add some tests for multiple scissor rectangles.
+      wined3d: Invalidate number of viewports set for the context.
+      wined3d: Use fewer calls to set viewport data.
+
+Owen Rudge (14):
+      wsdapi: Ensure text node parent is NULL before calling WSDXMLAddChild.
+      wsdapi: Register default namespaces when creating publisher.
+      wsdapi: Create Body and Hello elements in Hello message.
+      wsdapi/tests: Add test for Hello message Any body element.
+      wsdapi: Write EndPointReference section in Hello message body.
+      wsdapi/tests: Add test for endpoint reference "any" parameter.
+      wsdapi: Build and write Types list for Hello message.
+      wsdapi/tests: Add tests for Types list.
+      wsdapi: Build and write Scopes and XAddrs lists for Hello message.
+      wsdapi/tests: Add tests for Scopes and XAddrs lists.
+      wsdapi: Add MetadataVersion to Hello message.
+      wsdapi: Add support for sending reference parameters in the Hello message.
+      wsdapi: Implement UnPublish.
+      wsdapi/tests: Add tests for UnPublish.
+
+Piotr Caban (4):
+      ucrtbase: Add _timespec{32,64}_get implementation.
+      msi: Only mark non-registered features as absent if we haven't done anything with them.
+      msi: Support NULL value in INSERT query.
+      msvcp140: Add _Task_impl_base::_IsNonBlockingThread stub.
+
+Qian Hong (1):
+      kernel32: Init TimezoneInformation registry.
+
+Roderick Colenbrander (1):
+      ntdll: Read correct sysfs entry for core information.
+
+Sebastian Lackner (1):
+      advapi32/tests: Add basic tests for BuildSecurityDescriptor.
+
+Thomas Faber (1):
+      msxml3: Avoid buffer overflow in BindStatusCallback_GetBindInfo (DPH).
+
+Valentin Gabriel Mitrea (2):
+      d3d10: Implement D3D10CompileEffectFromMemory().
+      d3dx9: Fix D3DCompile() call.
+
+Zebediah Figura (45):
+      msi: Stop vending WineMsiRemotePackage.
+      msi: Allocate the remote handle on the server side.
+      msi: Convert the IWineMsiRemote* remote interfaces to RPC stubs.
+      msi: Make MsiGetProperty() RPC-compatible.
+      msi: Make MsiSetProperty() RPC-compatible.
+      msi/tests: Clean up property tests.
+      msi: Also null-terminate WCHAR strings.
+      msi/tests: Test properties from custom actions.
+      msi: Store a record's associated query privately.
+      msi: Make MsiProcessMessage() RPC-compatible.
+      msi/tests: Improve COM test.
+      msi: Make MsiGetActiveDatabase() RPC-compatible.
+      msi: Make MsiDatabaseIsTablePersistent() RPC-compatible.
+      msi: Make MsiDatabaseOpenView() RPC-compatible.
+      msi: Make MsiViewExecute() RPC-compatible.
+      msi: Make MsiViewFetch() RPC-compatible.
+      msi: Make MsiViewClose() RPC-compatible.
+      msi: Make MsiViewGetColumnInfo() RPC-compatible.
+      msi: Make MsiViewModify() RPC-compatible.
+      msi/tests: Add tests for MsiDatabaseGetPrimaryKeys().
+      msi: Make MsiDatabaseGetPrimaryKeys() RPC-compatible.
+      msi: Make MsiGetSummaryInformation() RPC-compatible.
+      msi: Make MsiDoAction() RPC-compatible.
+      msi: Make MsiSequence() RPC-compatible.
+      msi: Make MsiGetTargetPath() RPC-compatible.
+      msi: Make MsiSetTargetPath() RPC-compatible.
+      msi: Make MsiGetSourcePath() RPC-compatible.
+      msi: Avoid returning an uninitialized variable.
+      d3dx10/tests: Remove todo_wine from succeeding tests.
+      msi: Make MsiGetMode() RPC-compatible.
+      msi: Make MsiSetMode() RPC-compatible.
+      msi: Make MsiGetFeatureState() RPC-compatible.
+      msi: Make MsiSetFeatureState() RPC-compatible.
+      msi: Make MsiGetComponentState() RPC-compatible.
+      msi: Make MsiSetComponentState() RPC-compatible.
+      msi: Make MsiGetLanguage() RPC-compatible.
+      msi: Make MsiSetInstallLevel() RPC-compatible.
+      msi: Make MsiFormatRecord() RPC-compatible.
+      msi: Make MsiEvaluateCondition() RPC-compatible.
+      msi: Handle some invalid parameters in MsiGetFeatureCost().
+      msi: Make MsiGetFeatureCost() RPC-compatible.
+      msi: Make MsiEnumComponentCosts RPC-compatible.
+      msi: Make remote_GetActionInfo() RPC-compatible.
+      msi: Execute custom actions in a separate process.
+      msi: Initialize [out] strings to NULL.
+
+Zhiyi Zhang (3):
+      comctl32: GroupBox can have multiline text.
+      comctl32: Fix checkbox wrong box alignment with BS_VCENTER.
+      user32: Fix checkbox wrong box alignment with BS_VCENTER.
+
+--
+Alexandre Julliard
+julliard@winehq.org

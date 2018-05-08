@@ -6,7 +6,7 @@ This is made by reddit.com/u/guy1524, I just made it into a github repository fo
 
 I have no idea if this works and/or if it can get you banned. Use with caution.
 
-## The original post in reddit:
+## The original post on reddit:
 
 This is *not* guaranteed to work.  If you have any issues, send me them, and I'll change the guide.  This is tested on arch, so don't send me issues if you're not on it.  Also, wine-gecko is probably required.  By the way, if you a battleye user like me, you are shit out of luck in terms of battle royale.  );
 

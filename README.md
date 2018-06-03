@@ -12,9 +12,7 @@ This is *not* guaranteed to work.  If you have any issues, send me them, and I'l
 
 1) Compile wine-staging-git on the AUR to grap dependencies, or get them another way, idk how
 
-2) Download wine with my custom patches, right here: 
-
-https://me ga.nz/#!KotTyLgI!ZzEpmuE6g5VSxzGwe6KWmgL3PU_LXtyyrhYHVRLkhE4
+2) Clone this repo using `git clone https://github.com/OfficialBAMM/wine-fortnite.git` 
 
 3) Compile it, you can find a guide for how to compile wine here
 
